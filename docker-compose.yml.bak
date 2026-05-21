@@ -1,0 +1,104 @@
+services:
+  mysql:
+    image: mysql:8
+    container_name: task_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: task_system
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_PASSWORD: secret123
+      MYSQL_USER: task_user
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - task_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot123"]
+      timeout: 20s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: task_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - task_network
+
+  backend:
+    build: ./backend
+    container_name: task_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: task_system
+      DB_USERNAME: task_user
+      DB_PASSWORD: secret123
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - task_network
+
+  frontend:
+    build: ./frontend
+    container_name: task_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      VITE_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+    networks:
+      - task_network
+
+networks:
+  task_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
+
+  # Laravel Reverb (WebSocket)
+  reverb:
+    build: ./backend
+    container_name: task_reverb
+    restart: unless-stopped
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=task_system
+      - DB_USERNAME=task_user
+      - DB_PASSWORD=secret123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - backend
+      - redis
+    networks:
+      - task_network
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080

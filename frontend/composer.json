@@ -1,0 +1,6 @@
+{
+    "require": {
+        "laravel/reverb": "^1.10",
+        "predis/predis": "^3.4"
+    }
+}
