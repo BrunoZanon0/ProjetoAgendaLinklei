@@ -10,13 +10,10 @@ function App() {
   const { tasks, createTask, retryTask, fetchTasks } = useTasks();
   const { metrics, fetchMetrics } = useMetrics();
 
-  // Atualização automática a cada 3 segundos (polling)
   useEffect(() => {
-    // Buscar dados imediatamente
     fetchTasks();
     fetchMetrics();
     
-    // Configurar polling
     const interval = setInterval(() => {
       fetchTasks();
       fetchMetrics();

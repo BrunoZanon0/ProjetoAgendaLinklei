@@ -60,6 +60,8 @@ services:
         condition: service_started
     networks:
       - task_network
+    env_file:
+      - ./backend/.env
 
   worker-high:
     build: ./backend
@@ -158,6 +160,8 @@ services:
       - reverb
     networks:
       - task_network
+    env_file:
+      - ./frontend/.env
 
 networks:
   task_network:
