@@ -1,6 +1,4 @@
-cd ~/ProjetoAgenda
 
-cat > README.md << 'EOF'
 # 🚀 Task System - Sistema de Processamento Assíncrono com Filas
 
 Sistema para agendamento e processamento de tarefas em segundo plano com filas Redis e WebSocket.
