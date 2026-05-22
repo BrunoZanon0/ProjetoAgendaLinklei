@@ -11,18 +11,15 @@ use Illuminate\Http\JsonResponse;
 
 class TaskController extends Controller implements TaskControllerInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function index(): JsonResponse
     {
-        $tasks = Task::with('logs')->orderBy('created_at', 'desc')->get();
+        $tasks = Task::with('logs')
+            ->where('user_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
         return response()->json($tasks);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -32,7 +29,10 @@ class TaskController extends Controller implements TaskControllerInterface
         ]);
 
         $task = Task::create([
-            ...$validated,
+            'user_id' => auth()->id(),
+            'name' => $validated['name'],
+            'type' => $validated['type'],
+            'priority' => $validated['priority'],
             'status' => 'pending'
         ]);
 
@@ -44,19 +44,20 @@ class TaskController extends Controller implements TaskControllerInterface
         return response()->json($task, 201);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function show(Task $task): JsonResponse
     {
+        if ($task->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
         return response()->json($task->load('logs'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function retry(Task $task): JsonResponse
     {
+        if ($task->user_id !== auth()->id()) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         if ($task->status !== 'failed') {
             return response()->json(['error' => 'Only failed tasks can be retried'], 422);
         }
@@ -79,19 +80,18 @@ class TaskController extends Controller implements TaskControllerInterface
         return response()->json($task);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function metrics(): JsonResponse
     {
-        $total = Task::count();
-        $completed = Task::where('status', 'completed')->count();
-        $failed = Task::where('status', 'failed')->count();
-        $processing = Task::where('status', 'processing')->count();
-        $pending = Task::where('status', 'pending')->count();
+        $query = Task::where('user_id', auth()->id());
+        
+        $total = (clone $query)->count();
+        $completed = (clone $query)->where('status', 'completed')->count();
+        $failed = (clone $query)->where('status', 'failed')->count();
+        $processing = (clone $query)->where('status', 'processing')->count();
+        $pending = (clone $query)->where('status', 'pending')->count();
         
         $avgProcessingTime = 0;
-        $completedTasks = Task::where('status', 'completed')
+        $completedTasks = (clone $query)->where('status', 'completed')
             ->whereNotNull('started_at')
             ->whereNotNull('completed_at')
             ->get();
@@ -104,11 +104,11 @@ class TaskController extends Controller implements TaskControllerInterface
             $avgProcessingTime = $totalSeconds / $completedTasks->count();
         }
 
-        $tasksByType = Task::selectRaw('type, COUNT(*) as total')
+        $tasksByType = (clone $query)->selectRaw('type, COUNT(*) as total')
             ->groupBy('type')
             ->pluck('total', 'type');
 
-        $tasksByPriority = Task::selectRaw('priority, COUNT(*) as total')
+        $tasksByPriority = (clone $query)->selectRaw('priority, COUNT(*) as total')
             ->groupBy('priority')
             ->pluck('total', 'priority');
 

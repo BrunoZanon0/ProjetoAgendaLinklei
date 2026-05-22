@@ -1,50 +1,38 @@
-import React, { useEffect } from 'react';
-import { useTasks } from './hooks/useTasks';
-import { useMetrics } from './hooks/useMetrics';
-import { TaskForm } from './components/TaskForm/TaskForm';
-import { TaskList } from './components/TaskList/TaskList';
-import { Metrics } from './components/Metrics/Metrics';
+import React, { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { Login } from './components/Auth/Login';
+import { Register } from './components/Auth/Register';
+import { Dashboard } from './components/Dashboard';
 import './index.css';
 
-function App() {
-  const { tasks, createTask, retryTask, fetchTasks } = useTasks();
-  const { metrics, fetchMetrics } = useMetrics();
+const AppContent: React.FC = () => {
+  const { isAuthenticated, loading } = useAuth();
+  const [showRegister, setShowRegister] = useState(false);
 
-  useEffect(() => {
-    fetchTasks();
-    fetchMetrics();
-    
-    const interval = setInterval(() => {
-      fetchTasks();
-      fetchMetrics();
-    }, 2000);
-    
-    return () => clearInterval(interval);
-  }, [fetchTasks, fetchMetrics]);
-
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto p-4">
-        <header className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg rounded-lg p-6 mb-6">
-          <h1 className="text-4xl font-bold text-center">
-            📋 Sistema de Tarefas Assíncronas
-          </h1>
-          <p className="text-center mt-2 opacity-90">
-            Processamento em fila com Redis e Workers
-          </p>
-          <div className="text-center mt-2 text-sm opacity-75 bg-black bg-opacity-25 inline-block px-3 py-1 rounded-full mx-auto block w-fit">
-            📋 Atualização automática a cada 2 segundos
-          </div>
-        </header>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <TaskForm onCreateTask={createTask} />
-          <Metrics metrics={metrics} />
-        </div>
-
-        <TaskList tasks={tasks} onRetry={retryTask} />
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600">
+        <div className="text-white text-xl">Carregando...</div>
       </div>
-    </div>
+    );
+  }
+
+  if (isAuthenticated) {
+    return <Dashboard />;
+  }
+
+  if (showRegister) {
+    return <Register onSwitchToLogin={() => setShowRegister(false)} />;
+  }
+
+  return <Login onSwitchToRegister={() => setShowRegister(true)} />;
+};
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
