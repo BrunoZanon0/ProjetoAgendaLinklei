@@ -5,17 +5,24 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Jobs\ProcessTask;
 use App\Events\TaskStatusChanged;
+use App\Http\Interfaces\TaskControllerInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class TaskController extends Controller
+class TaskController extends Controller implements TaskControllerInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function index(): JsonResponse
     {
         $tasks = Task::with('logs')->orderBy('created_at', 'desc')->get();
         return response()->json($tasks);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
@@ -37,11 +44,17 @@ class TaskController extends Controller
         return response()->json($task, 201);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function show(Task $task): JsonResponse
     {
         return response()->json($task->load('logs'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function retry(Task $task): JsonResponse
     {
         if ($task->status !== 'failed') {
@@ -66,6 +79,9 @@ class TaskController extends Controller
         return response()->json($task);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function metrics(): JsonResponse
     {
         $total = Task::count();

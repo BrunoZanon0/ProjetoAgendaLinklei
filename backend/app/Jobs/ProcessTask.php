@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ProcessTask implements ShouldQueue
 {
@@ -63,7 +64,8 @@ class ProcessTask implements ShouldQueue
 
     private function process(): string
     {
-        $delay = $this->task->priority === 'high' ? 3 : 8;
+        // Delay original: High = 3 segundos, Default = 9 segundos
+        $delay = $this->task->priority === 'high' ? 3 : 9;
         sleep($delay);
 
         // Simular falha (20% de chance)
@@ -77,14 +79,18 @@ class ProcessTask implements ShouldQueue
                 'subject' => "Task #{$this->task->id}",
                 'body' => "This is a simulated email from task {$this->task->name}",
                 'sent_at' => now()->toDateTimeString()
-            ]);
+            ], JSON_PRETTY_PRINT);
         }
         
         return json_encode([
             'task_id' => $this->task->id,
             'task_name' => $this->task->name,
             'generated_at' => now()->toDateTimeString(),
-            'data' => ['processed' => true]
-        ]);
+            'data' => [
+                'total_processed' => rand(100, 1000),
+                'success_rate' => rand(85, 100) . '%',
+                'processing_time' => ($this->task->priority === 'high' ? 3 : 8) . ' seconds'
+            ]
+        ], JSON_PRETTY_PRINT);
     }
 }

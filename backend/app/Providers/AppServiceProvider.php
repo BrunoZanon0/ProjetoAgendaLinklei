@@ -3,20 +3,22 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Contracts\Repositories\TaskRepositoryInterface;
-use App\Contracts\Services\MetricsServiceInterface;
-use App\Repositories\TaskRepository;
-use App\Services\MetricsService;
+use App\Http\Interfaces\TaskControllerInterface;
+use App\Http\Controllers\TaskController;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
     public function register(): void
     {
-        // Bind interfaces to implementations
-        $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
-        $this->app->bind(MetricsServiceInterface::class, MetricsService::class);
+        $this->app->bind(TaskControllerInterface::class, TaskController::class);
     }
 
+    /**
+     * Bootstrap any application services.
+     */
     public function boot(): void
     {
         //
