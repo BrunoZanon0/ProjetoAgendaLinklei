@@ -49,8 +49,9 @@ export const Register: React.FC<RegisterProps> = ({ onSwitchToLogin }) => {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-law-primary rounded-full mb-4">
             <span className="text-4xl">⚖️</span>
           </div>
-          <h1 className="text-3xl font-law font-bold text-law-primary">Agenda Jurídica</h1>
-          <p className="text-law-text-light mt-2">Crie sua conta profissional</p>
+          <h1 className="text-3xl font-law font-bold text-law-primary">TaskFlow</h1>
+          <p className="text-law-text-light mt-2">Agendamento e Processamento de Tarefas</p>
+          <p className="text-sm text-law-text-light mt-1">Crie sua conta para começar</p>
         </div>
 
         {error && (
@@ -71,14 +72,14 @@ export const Register: React.FC<RegisterProps> = ({ onSwitchToLogin }) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-law-border rounded-lg focus:outline-none focus:ring-2 focus:ring-law-primary focus:border-transparent"
-                placeholder="Dr. João Silva"
+                placeholder="Seu nome"
                 required
               />
             </div>
           </div>
 
           <div className="mb-4">
-            <label className="block text-law-text font-medium mb-2">E-mail profissional</label>
+            <label className="block text-law-text font-medium mb-2">E-mail</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-law-text-light">📧</span>
@@ -88,7 +89,7 @@ export const Register: React.FC<RegisterProps> = ({ onSwitchToLogin }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-law-border rounded-lg focus:outline-none focus:ring-2 focus:ring-law-primary focus:border-transparent"
-                placeholder="advogado@escritorio.com.br"
+                placeholder="seu@email.com"
                 required
               />
             </div>

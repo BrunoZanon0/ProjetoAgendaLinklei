@@ -1,5 +1,4 @@
 import React from 'react';
-import { Scale, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export const Header: React.FC = () => {
@@ -11,11 +10,11 @@ export const Header: React.FC = () => {
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="bg-law-accent p-2 rounded-lg">
-              <Scale size={28} className="text-white" />
+              <span className="text-2xl">⚖️</span>
             </div>
             <div>
-              <h1 className="text-2xl font-law font-bold">Agenda Jurídica</h1>
-              <p className="text-sm opacity-90">Sistema de Tarefas Advocatícias</p>
+              <h1 className="text-2xl font-law font-bold">TaskFlow</h1>
+              <p className="text-sm opacity-90">Agendamento e Processamento de Tarefas</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -27,7 +26,7 @@ export const Header: React.FC = () => {
               onClick={logout}
               className="flex items-center gap-2 bg-law-accent hover:bg-opacity-80 px-4 py-2 rounded-lg transition"
             >
-              <LogOut size={18} />
+              <span>🚪</span>
               <span>Sair</span>
             </button>
           </div>

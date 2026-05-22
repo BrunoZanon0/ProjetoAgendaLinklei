@@ -32,8 +32,9 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-law-primary rounded-full mb-4">
             <span className="text-4xl">⚖️</span>
           </div>
-          <h1 className="text-3xl font-law font-bold text-law-primary">Agenda Jurídica</h1>
-          <p className="text-law-text-light mt-2">Faça login para acessar seu escritório</p>
+          <h1 className="text-3xl font-law font-bold text-law-primary">TaskFlow</h1>
+          <p className="text-law-text-light mt-2">Agendamento e Processamento de Tarefas</p>
+          <p className="text-sm text-law-text-light mt-1">Faça login para acessar o sistema</p>
         </div>
 
         {error && (
@@ -44,7 +45,7 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-law-text font-medium mb-2">E-mail profissional</label>
+            <label className="block text-law-text font-medium mb-2">E-mail</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <span className="text-law-text-light">📧</span>
@@ -54,7 +55,7 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-law-border rounded-lg focus:outline-none focus:ring-2 focus:ring-law-primary focus:border-transparent"
-                placeholder="advogado@escritorio.com.br"
+                placeholder="seu@email.com"
                 required
               />
             </div>
@@ -82,7 +83,7 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
             disabled={loading}
             className="w-full bg-law-primary hover:bg-opacity-90 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Acessando...' : 'Acessar Agenda'}
+            {loading ? 'Acessando...' : 'Acessar Sistema'}
           </button>
         </form>
 
@@ -93,7 +94,7 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
               onClick={onSwitchToRegister}
               className="text-law-primary font-semibold hover:underline"
             >
-              Criar conta profissional
+              Criar conta
             </button>
           </p>
         </div>
