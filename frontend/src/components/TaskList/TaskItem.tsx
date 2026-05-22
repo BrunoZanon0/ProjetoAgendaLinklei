@@ -29,7 +29,7 @@ const statusText = (status: string) => {
 };
 
 export const TaskItem: React.FC<TaskItemProps> = ({ task, onRetry }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const formatOutput = (output: string | null) => {
     if (!output) return null;
@@ -42,63 +42,129 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, onRetry }) => {
   };
 
   const formattedOutput = formatOutput(task.output);
-  const hasLongOutput = formattedOutput && formattedOutput.length > 200;
 
   return (
-    <div className={`${statusClass(task.status)} rounded-lg p-4 shadow-sm border`}>
-      <div className="flex justify-between items-start">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-2 flex-wrap">
-            <span className="font-semibold text-law-primary text-lg">{task.name}</span>
-            <span className={`text-xs px-2 py-1 rounded-full ${task.priority === 'high' ? 'priority-high' : 'priority-default'}`}>
-              {task.priority === 'high' ? '⚠️ Urgente' : '📋 Normal'}
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-4 text-sm text-law-text-light mb-2">
-            <span>{task.type === 'email' ? '📧 Comunicação' : '📄 Documento'}</span>
-            <span>Processo #{task.id}</span>
-            {task.attempts > 0 && <span>Tentativas: {task.attempts}</span>}
-          </div>
+    <>
+      <div className={`${statusClass(task.status)} rounded-lg p-4 shadow-sm border`}>
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className="font-semibold text-law-primary text-lg">{task.name}</span>
+              <span className={`text-xs px-2 py-1 rounded-full ${task.priority === 'high' ? 'priority-high' : 'priority-default'}`}>
+                {task.priority === 'high' ? '⚠️ Urgente' : '📋 Normal'}
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-4 text-sm text-law-text-light mb-2">
+              <span>{task.type === 'email' ? '📧 Comunicação' : '📄 Documento'}</span>
+              <span>Processo #{task.id}</span>
+              {task.attempts > 0 && <span>Tentativas: {task.attempts}</span>}
+            </div>
 
-          <div className="text-sm font-medium">{statusText(task.status)}</div>
+            <div className="text-sm font-medium">{statusText(task.status)}</div>
 
-          {formattedOutput && (
-            <div className="mt-3 bg-white bg-opacity-50 p-3 rounded text-xs">
-              <div className="flex justify-between items-center mb-2">
-                <strong className="text-law-primary">📋 Detalhes Completos:</strong>
-                {hasLongOutput && (
-                  <button
-                    onClick={() => setExpanded(!expanded)}
-                    className="text-law-primary hover:underline text-xs"
-                  >
-                    {expanded ? '📖 Ver menos' : '📖 Ver completo'}
-                  </button>
-                )}
+            {formattedOutput && (
+              <div className="mt-3">
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="text-law-primary hover:underline text-sm flex items-center gap-1"
+                >
+                  📋 Ver detalhes completos
+                </button>
               </div>
-              <pre className={`whitespace-pre-wrap font-mono text-xs ${expanded ? '' : 'max-h-32 overflow-hidden'}`}>
-                {formattedOutput}
-              </pre>
-            </div>
-          )}
-          
-          {task.error_message && (
-            <div className="mt-3 bg-red-100 p-3 rounded text-xs text-red-700">
-              <strong>❌ Erro:</strong>
-              <pre className="whitespace-pre-wrap font-mono text-xs mt-1">{task.error_message}</pre>
-            </div>
+            )}
+            
+            {task.error_message && (
+              <div className="mt-3 bg-red-100 p-3 rounded text-xs text-red-700">
+                <strong>❌ Erro:</strong>
+                <div className="mt-1">{task.error_message}</div>
+              </div>
+            )}
+          </div>
+
+          {task.status === 'failed' && (
+            <button
+              onClick={() => onRetry(task.id)}
+              className="bg-law-accent hover:bg-opacity-90 text-white px-4 py-2 rounded-lg text-sm transition ml-4"
+            >
+              🔄 Reprocessar
+            </button>
           )}
         </div>
-
-        {task.status === 'failed' && (
-          <button
-            onClick={() => onRetry(task.id)}
-            className="bg-law-accent hover:bg-opacity-90 text-white px-4 py-2 rounded-lg text-sm transition ml-4"
-          >
-            🔄 Reprocessar
-          </button>
-        )}
       </div>
-    </div>
+
+      {/* Modal para mostrar detalhes completos */}
+      {showModal && formattedOutput && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setShowModal(false)}>
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center p-4 border-b bg-law-primary text-white rounded-t-lg">
+              <h3 className="text-lg font-semibold">📋 Detalhes da Tarefa</h3>
+              <button onClick={() => setShowModal(false)} className="text-white hover:text-gray-200 text-xl">
+                ✕
+              </button>
+            </div>
+            <div className="flex-1 overflow-auto p-6">
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                  <strong className="text-law-primary">📌 Processo:</strong>
+                  <p className="mt-1">#{task.id}</p>
+                </div>
+                <div>
+                  <strong className="text-law-primary">📅 Data de criação:</strong>
+                  <p className="mt-1">{new Date(task.created_at).toLocaleString('pt-BR')}</p>
+                </div>
+                <div>
+                  <strong className="text-law-primary">🏷️ Título:</strong>
+                  <p className="mt-1">{task.name}</p>
+                </div>
+                <div>
+                  <strong className="text-law-primary">📧 Tipo:</strong>
+                  <p className="mt-1">{task.type === 'email' ? 'Comunicação' : 'Documento'}</p>
+                </div>
+                <div>
+                  <strong className="text-law-primary">⚡ Prioridade:</strong>
+                  <p className="mt-1">{task.priority === 'high' ? 'Urgente' : 'Normal'}</p>
+                </div>
+                <div>
+                  <strong className="text-law-primary">🔄 Status:</strong>
+                  <p className="mt-1">{statusText(task.status)}</p>
+                </div>
+                {task.completed_at && (
+                  <div>
+                    <strong className="text-law-primary">✅ Data de conclusão:</strong>
+                    <p className="mt-1">{new Date(task.completed_at).toLocaleString('pt-BR')}</p>
+                  </div>
+                )}
+                {task.attempts > 0 && (
+                  <div>
+                    <strong className="text-law-primary">🔄 Tentativas:</strong>
+                    <p className="mt-1">{task.attempts}</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="mt-4">
+                <strong className="text-law-primary text-lg">📄 Detalhes Completos:</strong>
+                <pre className="mt-2 bg-gray-50 p-4 rounded-lg text-xs overflow-auto max-h-96 whitespace-pre-wrap border border-law-border">
+                  {formattedOutput}
+                </pre>
+              </div>
+
+              {task.error_message && (
+                <div className="mt-4 bg-red-50 p-4 rounded-lg">
+                  <strong className="text-law-error">❌ Mensagem de Erro:</strong>
+                  <pre className="mt-2 text-sm text-red-700 whitespace-pre-wrap">{task.error_message}</pre>
+                </div>
+              )}
+            </div>
+            <div className="p-4 border-t flex justify-end bg-gray-50 rounded-b-lg">
+              <button onClick={() => setShowModal(false)} className="law-btn-primary">
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
