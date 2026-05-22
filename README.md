@@ -1,37 +1,62 @@
+cd ~/ProjetoAgenda
+
+cat > README.md << 'EOF'
+# 🚀 Task System - Sistema de Processamento Assíncrono com Filas
+
 Sistema para agendamento e processamento de tarefas em segundo plano com filas Redis e WebSocket.
 
-## 🚀 Tecnologias
+## 📋 Sobre o Projeto
 
-- **Backend:** Laravel 11 + PHP 8.4
-- **Frontend:** React 18 + TypeScript + Tailwind CSS
-- **Banco de Dados:** MySQL 8
-- **Fila:** Redis
-- **WebSocket:** Laravel Reverb
-- **Container:** Docker + Docker Compose
+Este projeto é um sistema completo de gerenciamento de tarefas assíncronas, onde os usuários podem criar tarefas que são processadas em segundo plano através de filas prioritárias. O sistema oferece uma interface moderna e responsiva com atualizações em tempo real.
 
-## 📋 Funcionalidades
+### 🎯 Funcionalidades
 
-- ✅ Criar tarefas (email/report) com prioridade (high/default)
-- ✅ Processamento assíncrono com filas Redis
-- ✅ Workers dedicados para cada prioridade
-- ✅ Status em tempo real (pending, processing, completed, failed, retrying)
-- ✅ Retry automático com backoff exponencial
+#### Backend
+- ✅ Criar, listar e consultar tarefas
+- ✅ Status do ciclo de vida (pending, processing, completed, failed, retrying)
 - ✅ Reprocessamento manual de tarefas falhas
+- ✅ Retry automático com backoff exponencial (5s, 15s, 30s)
 - ✅ Logs detalhados de execução
-- ✅ Métricas em tempo real
-- ✅ Interface responsiva com atualização automática
+- ✅ Emissão de eventos via WebSocket
+- ✅ Métricas gerais (taxa de sucesso, tempo médio, etc.)
+- ✅ Autenticação com Laravel Sanctum
 
-## 🐳 Como Executar
+#### Frontend
+- ✅ Tela de Login e Cadastro
+- ✅ Listagem de tarefas com status atualizado em tempo real
+- ✅ Formulário para criar tarefas (nome, tipo e prioridade)
+- ✅ Botão de retry para tarefas com falha
+- ✅ Painel com métricas do sistema
+- ✅ Design responsivo com Tailwind CSS
 
-### Pré-requisitos
+#### Infraestrutura
+- ✅ Docker Compose com todos serviços
+- ✅ Workers dedicados para cada prioridade (high/default)
+- ✅ Banco de dados MySQL 8
+- ✅ Redis para filas
+- ✅ Laravel Reverb para WebSocket
+
+## 🛠️ Tecnologias Utilizadas
+
+| Camada | Tecnologias |
+|--------|-------------|
+| **Backend** | Laravel 11, PHP 8.4, MySQL 8, Redis |
+| **Frontend** | React 18, TypeScript, Tailwind CSS, Axios |
+| **Infraestrutura** | Docker, Docker Compose, Nginx |
+| **Autenticação** | Laravel Sanctum |
+| **WebSocket** | Laravel Reverb |
+
+## 📦 Pré-requisitos
+
 - Docker e Docker Compose instalados
-- Portas 3000, 8000, 3306, 6379, 8080 disponíveis
+- Portas disponíveis: 3000, 8000, 3306, 6379, 8080
+- Git
 
-### Estrutura do Projeto 
+## 🚀 Como Executar
 
-ProjetoAgenda/
-├── backend/          # Laravel
-├── frontend/         # React + TypeScript
-├── docker/           # Configurações Docker
-├── docker-compose.yml
-└── start.sh
+./start.sh
+
+Entre no docker do backend e execure
+
+1 - php artisan migrate
+2 - php artisan db:seed -> para popular com registros ficticios
