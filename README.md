@@ -56,5 +56,16 @@ Este projeto é um sistema completo de gerenciamento de tarefas assíncronas, on
 
 Entre no docker do backend e execure
 
-1 - php artisan migrate
-2 - php artisan db:seed -> para popular com registros ficticios
+- 1 - php artisan migrate
+- 2 - php artisan db:seed -> para popular com registros ficticios
+
+## Executando testes 
+
+# Executar testes
+- docker exec -it task_backend php artisan test
+
+# Executar apenas testes de feature
+- docker exec -it task_backend php artisan test --testsuite=Feature
+
+# Executar teste específico
+- docker exec -it task_backend php artisan test --filter=TaskApiTest
