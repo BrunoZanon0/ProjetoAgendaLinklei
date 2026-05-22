@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Task } from '../../types/task.types';
 
 interface TaskItemProps {
@@ -29,6 +29,21 @@ const statusText = (status: string) => {
 };
 
 export const TaskItem: React.FC<TaskItemProps> = ({ task, onRetry }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const formatOutput = (output: string | null) => {
+    if (!output) return null;
+    try {
+      const parsed = JSON.parse(output);
+      return JSON.stringify(parsed, null, 2);
+    } catch {
+      return output;
+    }
+  };
+
+  const formattedOutput = formatOutput(task.output);
+  const hasLongOutput = formattedOutput && formattedOutput.length > 200;
+
   return (
     <div className={`${statusClass(task.status)} rounded-lg p-4 shadow-sm border`}>
       <div className="flex justify-between items-start">
@@ -48,16 +63,29 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, onRetry }) => {
 
           <div className="text-sm font-medium">{statusText(task.status)}</div>
 
-          {task.output && (
-            <div className="mt-2 bg-white bg-opacity-50 p-2 rounded text-xs">
-              <strong>Detalhes:</strong> {task.output.substring(0, 150)}
-              {task.output.length > 150 && '...'}
+          {formattedOutput && (
+            <div className="mt-3 bg-white bg-opacity-50 p-3 rounded text-xs">
+              <div className="flex justify-between items-center mb-2">
+                <strong className="text-law-primary">📋 Detalhes Completos:</strong>
+                {hasLongOutput && (
+                  <button
+                    onClick={() => setExpanded(!expanded)}
+                    className="text-law-primary hover:underline text-xs"
+                  >
+                    {expanded ? '📖 Ver menos' : '📖 Ver completo'}
+                  </button>
+                )}
+              </div>
+              <pre className={`whitespace-pre-wrap font-mono text-xs ${expanded ? '' : 'max-h-32 overflow-hidden'}`}>
+                {formattedOutput}
+              </pre>
             </div>
           )}
           
           {task.error_message && (
-            <div className="mt-2 bg-red-100 p-2 rounded text-xs text-red-700">
-              <strong>Erro:</strong> {task.error_message}
+            <div className="mt-3 bg-red-100 p-3 rounded text-xs text-red-700">
+              <strong>❌ Erro:</strong>
+              <pre className="whitespace-pre-wrap font-mono text-xs mt-1">{task.error_message}</pre>
             </div>
           )}
         </div>
