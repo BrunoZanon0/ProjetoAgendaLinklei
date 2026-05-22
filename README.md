@@ -1,6 +1,9 @@
 
 # 🚀 Task System - Sistema de Processamento Assíncrono com Filas
 
+<img width="1198" height="904" alt="image" src="https://github.com/user-attachments/assets/64fe6bbf-73cf-4c96-a7b3-051e771a9138" />
+
+
 Sistema para agendamento e processamento de tarefas em segundo plano com filas Redis e WebSocket.
 
 ## 📋 Sobre o Projeto
