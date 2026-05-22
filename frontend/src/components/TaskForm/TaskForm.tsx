@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CreateTaskDTO } from '../../types/task.types';
+import { FileText, Mail, Gavel, Clock } from 'lucide-react';
 
 interface TaskFormProps {
   onCreateTask: (data: CreateTaskDTO) => Promise<void>;
@@ -16,7 +17,6 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onCreateTask }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
-    
     setLoading(true);
     try {
       await onCreateTask(formData);
@@ -27,14 +27,21 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onCreateTask }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-4">✨ Criar Nova Tarefa</h2>
+    <div className="law-card p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="bg-law-primary p-2 rounded-lg">
+          <Gavel size={20} className="text-white" />
+        </div>
+        <h2 className="text-xl font-law font-bold text-law-primary">Nova Tarefa Jurídica</h2>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Nome</label>
+          <label className="block text-law-text font-medium mb-2">Título da Tarefa</label>
           <input
             type="text"
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="law-input"
+            placeholder="Ex: Elaborar petição, Enviar notificação, etc."
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             disabled={loading}
@@ -43,37 +50,67 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onCreateTask }) => {
         </div>
 
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Tipo</label>
-          <select
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value as any })}
-            disabled={loading}
-          >
-            <option value="email">📧 E-mail</option>
-            <option value="report">📊 Relatório</option>
-          </select>
+          <label className="block text-law-text font-medium mb-2">Tipo de Atividade</label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: 'email' })}
+              className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                formData.type === 'email'
+                  ? 'bg-law-primary border-law-primary text-white'
+                  : 'border-law-border text-law-text hover:bg-gray-50'
+              }`}
+            >
+              <Mail size={18} />
+              <span>Comunicação</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, type: 'report' })}
+              className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                formData.type === 'report'
+                  ? 'bg-law-primary border-law-primary text-white'
+                  : 'border-law-border text-law-text hover:bg-gray-50'
+              }`}
+            >
+              <FileText size={18} />
+              <span>Documento</span>
+            </button>
+          </div>
         </div>
 
         <div>
-          <label className="block text-gray-700 font-medium mb-2">Prioridade</label>
-          <select
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            value={formData.priority}
-            onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
-            disabled={loading}
-          >
-            <option value="high">🔴 Alta</option>
-            <option value="default">🟡 Normal</option>
-          </select>
+          <label className="block text-law-text font-medium mb-2">Prioridade</label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, priority: 'high' })}
+              className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                formData.priority === 'high'
+                  ? 'bg-law-warning border-law-warning text-white'
+                  : 'border-law-border text-law-text hover:bg-gray-50'
+              }`}
+            >
+              <Clock size={18} />
+              <span>Urgente</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, priority: 'default' })}
+              className={`flex items-center justify-center gap-2 p-3 rounded-lg border transition-all ${
+                formData.priority === 'default'
+                  ? 'bg-law-secondary border-law-secondary text-white'
+                  : 'border-law-border text-law-text hover:bg-gray-50'
+              }`}
+            >
+              <Clock size={18} />
+              <span>Normal</span>
+            </button>
+          </div>
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-2 rounded-lg transition"
-        >
-          {loading ? '⏳ Criando...' : '🚀 Criar Tarefa'}
+        <button type="submit" disabled={loading} className="law-btn-primary w-full">
+          {loading ? 'Criando...' : 'Criar Tarefa'}
         </button>
       </form>
     </div>

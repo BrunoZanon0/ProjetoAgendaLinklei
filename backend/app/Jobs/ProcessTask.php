@@ -75,9 +75,9 @@ class ProcessTask implements ShouldQueue
 
         if ($this->task->type === 'email') {
             return json_encode([
-                'to' => 'user@example.com',
+                'to' => 'EmailExample: Bruno@gmail.com',
                 'subject' => "Task #{$this->task->id}",
-                'body' => "This is a simulated email from task {$this->task->name}",
+                'body' => "Simulação do envio do body do email {$this->task->name}",
                 'sent_at' => now()->toDateTimeString()
             ], JSON_PRETTY_PRINT);
         }

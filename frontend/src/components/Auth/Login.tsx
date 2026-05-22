@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { Scale, User, Lock } from 'lucide-react';
 
 interface LoginProps {
   onSwitchToRegister: () => void;
@@ -16,7 +17,6 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       await login(email, password);
     } catch (err: any) {
@@ -27,59 +27,63 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600">
-      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-law-pattern bg-law-primary">
+      <div className="law-card p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">📋 Task System</h1>
-          <p className="text-gray-600 mt-2">Faça login para continuar</p>
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-law-primary rounded-full mb-4">
+            <Scale size={32} className="text-white" />
+          </div>
+          <h1 className="text-3xl font-law font-bold text-law-primary">Agenda Jurídica</h1>
+          <p className="text-law-text-light mt-2">Faça login para acessar seu escritório</p>
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-50 border border-red-200 text-law-error px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2">E-mail</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <label className="block text-law-text font-medium mb-2">E-mail profissional</label>
+            <div className="relative">
+              <User size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-law-text-light" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="law-input pl-10"
+                placeholder="advogado@escritorio.com.br"
+                required
+              />
+            </div>
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <label className="block text-law-text font-medium mb-2">Senha</label>
+            <div className="relative">
+              <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-law-text-light" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="law-input pl-10"
+                placeholder="••••••••"
+                required
+              />
+            </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition duration-200"
-          >
-            {loading ? 'Entrando...' : 'Entrar'}
+          <button type="submit" disabled={loading} className="law-btn-primary w-full">
+            {loading ? 'Acessando...' : 'Acessar Agenda'}
           </button>
         </form>
 
-        <div className="mt-4 text-center">
-          <p className="text-gray-600">
-            Não tem uma conta?{' '}
-            <button
-              onClick={onSwitchToRegister}
-              className="text-blue-600 hover:text-blue-700 font-semibold"
-            >
-              Cadastre-se
+        <div className="mt-6 text-center">
+          <p className="text-law-text-light">
+            Não tem cadastro?{' '}
+            <button onClick={onSwitchToRegister} className="text-law-primary font-semibold hover:underline">
+              Criar conta profissional
             </button>
           </p>
         </div>

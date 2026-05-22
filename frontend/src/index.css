@@ -1,3 +1,77 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Cores fixas */
+.bg-law-primary { background-color: #1a365d; }
+.bg-law-secondary { background-color: #2d3748; }
+.bg-law-accent { background-color: #b8860b; }
+.bg-law-bg { background-color: #f7fafc; }
+.bg-law-card { background-color: #ffffff; }
+.bg-law-success { background-color: #2f855a; }
+.bg-law-warning { background-color: #c05621; }
+.bg-law-error { background-color: #9b2c2c; }
+
+.text-law-primary { color: #1a365d; }
+.text-law-secondary { color: #2d3748; }
+.text-law-accent { color: #b8860b; }
+.text-law-success { color: #2f855a; }
+.text-law-warning { color: #c05621; }
+.text-law-error { color: #9b2c2c; }
+.text-law-text { color: #2d3748; }
+.text-law-text-light { color: #718096; }
+
+.border-law-border { border-color: #e2e8f0; }
+
+/* Classes personalizadas */
+.law-card {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #e2e8f0;
+  padding: 1.5rem;
+}
+
+.law-input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+}
+
+.law-input:focus {
+  outline: none;
+  border-color: #1a365d;
+  box-shadow: 0 0 0 2px rgba(26, 54, 93, 0.2);
+}
+
+.law-btn-primary {
+  background-color: #1a365d;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.law-btn-primary:hover {
+  background-color: #143047;
+}
+
+.law-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Status colors */
+.status-pending { background-color: #fef3c7; color: #92400e; border-color: #fde68a; }
+.status-processing { background-color: #dbeafe; color: #1e40af; border-color: #bfdbfe; }
+.status-completed { background-color: #d1fae5; color: #065f46; border-color: #a7f3d0; }
+.status-failed { background-color: #fee2e2; color: #991b1b; border-color: #fecaca; }
+.status-retrying { background-color: #ffedd5; color: #9a3412; border-color: #fed7aa; }
+
+/* Priority colors */
+.priority-high { background-color: #c05621; color: white; }
+.priority-default { background-color: #2d3748; color: white; }
