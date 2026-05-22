@@ -43,79 +43,106 @@ export const Register: React.FC<RegisterProps> = ({ onSwitchToLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-600">
-      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-law-pattern bg-law-primary">
+      <div className="law-card p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">📋 Task System</h1>
-          <p className="text-gray-600 mt-2">Crie sua conta</p>
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-law-primary rounded-full mb-4">
+            <span className="text-4xl">⚖️</span>
+          </div>
+          <h1 className="text-3xl font-law font-bold text-law-primary">Agenda Jurídica</h1>
+          <p className="text-law-text-light mt-2">Crie sua conta profissional</p>
         </div>
 
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-50 border border-red-200 text-law-error px-4 py-3 rounded-lg mb-4">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2">Nome</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <label className="block text-law-text font-medium mb-2">Nome completo</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-law-text-light">👤</span>
+              </div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-law-border rounded-lg focus:outline-none focus:ring-2 focus:ring-law-primary focus:border-transparent"
+                placeholder="Dr. João Silva"
+                required
+              />
+            </div>
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2">E-mail</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <label className="block text-law-text font-medium mb-2">E-mail profissional</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-law-text-light">📧</span>
+              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-law-border rounded-lg focus:outline-none focus:ring-2 focus:ring-law-primary focus:border-transparent"
+                placeholder="advogado@escritorio.com.br"
+                required
+              />
+            </div>
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 font-medium mb-2">Senha</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <label className="block text-law-text font-medium mb-2">Senha</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-law-text-light">🔒</span>
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-law-border rounded-lg focus:outline-none focus:ring-2 focus:ring-law-primary focus:border-transparent"
+                placeholder="Mínimo 6 caracteres"
+                required
+              />
+            </div>
           </div>
 
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-2">Confirmar Senha</label>
-            <input
-              type="password"
-              value={passwordConfirmation}
-              onChange={(e) => setPasswordConfirmation(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <label className="block text-law-text font-medium mb-2">Confirmar Senha</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <span className="text-law-text-light">✓</span>
+              </div>
+              <input
+                type="password"
+                value={passwordConfirmation}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-law-border rounded-lg focus:outline-none focus:ring-2 focus:ring-law-primary focus:border-transparent"
+                placeholder="Confirme sua senha"
+                required
+              />
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-lg transition duration-200"
+            className="w-full bg-law-primary hover:bg-opacity-90 text-white font-semibold py-3 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Cadastrando...' : 'Cadastrar'}
+            {loading ? 'Cadastrando...' : 'Criar Conta'}
           </button>
         </form>
 
-        <div className="mt-4 text-center">
-          <p className="text-gray-600">
+        <div className="mt-6 text-center">
+          <p className="text-law-text-light">
             Já tem uma conta?{' '}
             <button
               onClick={onSwitchToLogin}
-              className="text-blue-600 hover:text-blue-700 font-semibold"
+              className="text-law-primary font-semibold hover:underline"
             >
               Faça login
             </button>
