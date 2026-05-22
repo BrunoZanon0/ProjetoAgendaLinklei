@@ -17,7 +17,7 @@ function App() {
     const interval = setInterval(() => {
       fetchTasks();
       fetchMetrics();
-    }, 3000);
+    }, 2000);
     
     return () => clearInterval(interval);
   }, [fetchTasks, fetchMetrics]);
@@ -33,7 +33,7 @@ function App() {
             Processamento em fila com Redis e Workers
           </p>
           <div className="text-center mt-2 text-sm opacity-75 bg-black bg-opacity-25 inline-block px-3 py-1 rounded-full mx-auto block w-fit">
-            🔄 Atualização automática a cada 3 segundos
+            🔄 Atualização automática a cada 2 segundos
           </div>
         </header>
 
