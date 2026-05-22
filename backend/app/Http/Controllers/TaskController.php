@@ -74,7 +74,6 @@ class TaskController extends Controller
         $processing = Task::where('status', 'processing')->count();
         $pending = Task::where('status', 'pending')->count();
         
-        // Tempo médio de processamento - versão compatível com MySQL
         $avgProcessingTime = 0;
         $completedTasks = Task::where('status', 'completed')
             ->whereNotNull('started_at')
@@ -89,12 +88,10 @@ class TaskController extends Controller
             $avgProcessingTime = $totalSeconds / $completedTasks->count();
         }
 
-        // Tarefas por tipo
         $tasksByType = Task::selectRaw('type, COUNT(*) as total')
             ->groupBy('type')
             ->pluck('total', 'type');
 
-        // Tarefas por prioridade
         $tasksByPriority = Task::selectRaw('priority, COUNT(*) as total')
             ->groupBy('priority')
             ->pluck('total', 'priority');

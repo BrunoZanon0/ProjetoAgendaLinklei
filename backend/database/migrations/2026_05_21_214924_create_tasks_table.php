@@ -13,13 +13,7 @@ return new class extends Migration
             $table->string('name');
             $table->enum('type', ['email', 'report']);
             $table->enum('priority', ['high', 'default']);
-            $table->enum('status', [
-                'pending',
-                'processing',
-                'completed',
-                'failed',
-                'retrying'
-            ])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'completed', 'failed', 'retrying'])->default('pending');
             $table->integer('attempts')->default(0);
             $table->text('output')->nullable();
             $table->text('error_message')->nullable();

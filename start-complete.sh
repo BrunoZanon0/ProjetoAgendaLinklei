@@ -4,9 +4,6 @@ echo "🚀 Iniciando Task System completo..."
 # Subir containers
 docker compose up -d
 
-# Aguardar
-sleep 5
-
 # Iniciar workers em background
 docker exec -d task_backend php artisan queue:work redis --queue=high --tries=3
 docker exec -d task_backend php artisan queue:work redis --queue=default --tries=3
