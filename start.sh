@@ -27,7 +27,7 @@ echo "✅ MySQL pronto!"
 
 echo ""
 echo "⏳ Aguardando backend..."
-sleep 5
+sleep 10
 
 echo ""
 echo "🔧 Configurando o backend..."
@@ -39,18 +39,22 @@ if ! docker ps | grep -q task_backend; then
     sleep 5
 fi
 
-# Gerar APP_KEY
-docker exec task_backend php artisan key:generate --force 2>/dev/null || echo "⚠️ Erro ao gerar key"
+# Gerar APP_KEY (forçar)
+docker exec task_backend php artisan key:generate --force 2>/dev/null || echo "⚠️ Key já existe"
 
-# Rodar migrations
-docker exec task_backend php artisan migrate --force 2>/dev/null || echo "⚠️ Erro ao rodar migrations"
+# Verificar se a key foi gerada
+docker exec task_backend php artisan config:clear 2>/dev/null
 
-# Rodar seeders
-docker exec task_backend php artisan db:seed --class=UserSeeder --force 2>/dev/null || echo "⚠️ Seeder de usuários já executado"
+# Rodar migrations (--force para não perguntar)
+docker exec task_backend php artisan migrate --force 2>/dev/null || echo "⚠️ Migrations já rodadas"
+
+# Rodar seeders (ignorar se já existir)
+docker exec task_backend php artisan db:seed --class=UserSeeder --force 2>/dev/null || echo "✅ Usuários já existem"
 
 # Limpar cache
 docker exec task_backend php artisan config:clear 2>/dev/null
 docker exec task_backend php artisan cache:clear 2>/dev/null
+docker exec task_backend php artisan view:clear 2>/dev/null
 
 # Iniciar workers
 echo "⚙️ Iniciando workers..."
