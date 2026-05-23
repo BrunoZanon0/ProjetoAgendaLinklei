@@ -36,19 +36,12 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/var/www/html
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
       - APP_URL=http://localhost:8000
-      - DB_CONNECTION=mysql
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=task_system
-      - DB_USERNAME=task_user
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - QUEUE_CONNECTION=redis
     depends_on:
       mysql:
         condition: service_healthy
@@ -62,15 +55,10 @@ services:
     container_name: task_worker_high
     restart: unless-stopped
     environment:
-      - DB_CONNECTION=mysql
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=task_system
-      - DB_USERNAME=task_user
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
       - QUEUE_CONNECTION=redis
+      - REDIS_HOST=redis
+    volumes:
+      - ./backend:/var/www/html
     depends_on:
       - backend
       - redis
@@ -84,15 +72,10 @@ services:
     container_name: task_worker_default
     restart: unless-stopped
     environment:
-      - DB_CONNECTION=mysql
-      - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=task_system
-      - DB_USERNAME=task_user
-      - DB_PASSWORD=secret123
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
       - QUEUE_CONNECTION=redis
+      - REDIS_HOST=redis
+    volumes:
+      - ./backend:/var/www/html
     depends_on:
       - backend
       - redis
@@ -107,6 +90,9 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
       - backend
     networks:
